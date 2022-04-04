@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using Dapper;
 using TP1.Utils;
 using TP1.Models;
+using TP1.Services;
 
 namespace TP1.Controllers
 {
@@ -24,20 +25,20 @@ namespace TP1.Controllers
 
         [HttpGet]
         public IActionResult GetAll(){
-            return Ok(BD.GetAll());
+            return Ok(PizzasServices.GetAll());
         }
 
         [HttpGet("{id}")]
         public IActionResult GetById(int id){
             if(id <= 0) return BadRequest();
-            Pizza p = BD.GetById(id);
+            Pizza p = PizzasServices.GetById(id);
             if(p == null) return NotFound();
             else return Ok(p);
         }
 
         [HttpPost]
         public IActionResult Create(Pizza p){
-            bool cambios = BD.Create(p);
+            bool cambios = PizzasServices.Create(p);
             if(!cambios) return BadRequest();
             else return CreatedAtAction(nameof(Create), new { id = p.Id }, p);
         }
@@ -45,7 +46,7 @@ namespace TP1.Controllers
         [HttpPut("{id}")]
         public IActionResult Update(int id, Pizza p){
             if(p.Id != id) return BadRequest();
-            bool cambios = BD.Update(id,p);
+            bool cambios = PizzasServices.Update(id,p);
             if(!cambios) return NotFound();
             return Ok(p);
         }
@@ -53,7 +54,7 @@ namespace TP1.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id){
             if(id <= 0) return BadRequest();
-            bool cambios = BD.Delete(id);
+            bool cambios = PizzasServices.Delete(id);
             if(!cambios) return NotFound();
             return Ok();
         }
