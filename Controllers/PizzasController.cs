@@ -9,6 +9,7 @@ using Dapper;
 using TP1.Utils;
 using TP1.Models;
 using TP1.Services;
+using TP1.Helpers;
 
 namespace TP1.Controllers
 {

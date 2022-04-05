@@ -11,6 +11,9 @@ using TP1.Models;
 
 namespace TP1.Services{
     public static class UsuariosServices{
-        
+        public static Usuario Login(string userName, string password){}
+        public static Usuario GetByUserNamePassword(string userName, string password){}
+        public static Usuario GetTokenById(string userName, string password){}
+        public static string RefreshToken(int id){}
     }
 }
