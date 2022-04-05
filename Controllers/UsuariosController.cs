@@ -24,6 +24,12 @@ namespace TP1.Controllers
             _logger = logger;
         }
 
-        
+        [HttpPost] 
+        [Route("login")] 
+        public IActionResult Login(Usuario usuario){
+            Usuario p = UsuariosServices.Login(usuario.UserName, usuario.PassWord);
+            if(p == null) return NotFound();
+            else return Ok(p);
+        }
     }
 }

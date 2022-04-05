@@ -9,15 +9,13 @@ using Dapper;
 using TP1.Utils;
 using TP1.Models;
 using TP1.Helpers;
+using TP1.Services;
 
 namespace TP1.Helpers{
     public static class SecurityHelper{
         public static bool IsValidToken(string token){
-            Pizza p = null;
-            using (SqlConnection db = BD.GetConnection())
-            {
-                p = db.QueryFirstOrDefault<Pizza>("SELECT * FROM Usuarios WHERE Token IS NOT NULL AND DATEDIFF(mi,TokenExpirationDate,GETDATE()) < 15", new {Pid = id});
-            }
+            Usuario p = null;
+            p = UsuariosServices.GetTokenById(token);
             if(p != null) return true;
             return false;
         }

@@ -39,13 +39,17 @@ namespace TP1.Controllers
 
         [HttpPost]
         public IActionResult Create(Pizza p){
-            bool cambios = PizzasServices.Create(p);
-            if(!cambios) return BadRequest();
+            string headerToken = Request.Headers["token"];
+            if(!SecurityHelper.IsValidToken(headerToken)) return Unauthorized();
+            int cambios = PizzasServices.Create(p);
+            if(cambios <= 0) return BadRequest();
             else return CreatedAtAction(nameof(Create), new { id = p.Id }, p);
         }
 
         [HttpPut("{id}")]
         public IActionResult Update(int id, Pizza p){
+            string headerToken = Request.Headers["token"];
+            if(!SecurityHelper.IsValidToken(headerToken)) return Unauthorized();
             if(p.Id != id) return BadRequest();
             bool cambios = PizzasServices.Update(id,p);
             if(!cambios) return NotFound();
@@ -54,6 +58,8 @@ namespace TP1.Controllers
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id){
+            string headerToken = Request.Headers["token"];
+            if(!SecurityHelper.IsValidToken(headerToken)) return Unauthorized();
             if(id <= 0) return BadRequest();
             bool cambios = PizzasServices.Delete(id);
             if(!cambios) return NotFound();

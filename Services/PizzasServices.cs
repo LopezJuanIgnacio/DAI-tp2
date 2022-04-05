@@ -27,14 +27,13 @@ namespace TP1.Services{
             }
             return p;
         }
-        public static bool Create(Pizza p){
+        public static int Create(Pizza p){
             int a = 0;
             using (SqlConnection db = BD.GetConnection())
             {
-                a = db.Execute("INSERT INTO Pizzas (Nombre, LibreGluten, Importe, Descripcion) VALUES (@Pnombre, @Plg, @Pimporte, @Pdescripcion);", new {Pnombre = p.Nombre, Plg = p.LibreGluten, Pimporte = p.Importe, Pdescripcion = p.Descripcion});
+                a = db.Execute("INSERT INTO Pizzas (Nombre, LibreGluten, Importe, Descripcion) VALUES (@Pnombre, @Plg, @Pimporte, @Pdescripcion) SELECT CAST(SCOPE_IDENTITY() AS INT);", new {Pnombre = p.Nombre, Plg = p.LibreGluten, Pimporte = p.Importe, Pdescripcion = p.Descripcion});
             }
-            if(a > 0) return true;
-            return false;
+            return a;
         }
         public static bool Update(int id, Pizza p){
             int a = 0;
