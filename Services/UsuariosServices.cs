@@ -32,19 +32,18 @@ namespace TP1.Services{
             Usuario p = null;
             using (SqlConnection db = BD.GetConnection())
             {
-                p = db.QueryFirstOrDefault<Usuario>("SELECT * FROM Usuarios WHERE Token = @token AND DATEDIFF(mi,TokenExpirationDate,GETDATE()) < 15", new {t = token});
+                p = db.QueryFirstOrDefault<Usuario>("SELECT * FROM Usuarios WHERE Token = @t AND DATEDIFF(mi,TokenExpirationDate,GETDATE()) < 15", new {t = token});
             }
             return p;
         }
         //podria ser private
         public static string RefreshToken(int id){
             string nuevoToken = Guid.NewGuid().ToString();
-            DateTime expiracion = new DateTime();
-            expiracion.AddMinutes(15);
+            DateTime expiracion = DateTime.Now;
             int t = 0;
             using (SqlConnection db = BD.GetConnection())
             {
-                t = db.Execute("UPDATE Usuarios (Token, TokenExpirationDate) VALUES (@t, @e) WHERE id = @Tid;", new {t = nuevoToken, e = expiracion, Tid = id});
+                t = db.Execute("UPDATE Usuarios SET Token = @t, TokenExpirationDate = @e WHERE id = @Tid;", new {t = nuevoToken, e = expiracion, Tid = id});
             }
             if(t > 0) return nuevoToken;
             return null;
